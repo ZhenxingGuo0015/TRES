@@ -1,4 +1,4 @@
-Package: MeRIP
+Package: MeRIPeak
 Type: Package
 Title: An Empirical Bayesian method for MeRIP-seq Peak Detection.
 Version: 0.1.0
