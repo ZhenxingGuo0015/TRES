@@ -1,0 +1,10 @@
+Package: MeRIP
+Type: Package
+Title: An Empirical Bayesian method for MeRIP-seq Peak Detection.
+Version: 0.1.0
+Author: Zhenxing Guo 
+Maintainer: Zhenxing Guo <zhenxing.guo@emory.edu>
+Description: This function implements a two-step procedure to conduct peak calling for MeRIP-seq data. In the first step, it loosely indentify candidate peak regions using an ad hoc procedure.In the second step, it ranks the candidate regions with more rigorous statistical modeling based on an empirical Bayesian hierarchical model.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
