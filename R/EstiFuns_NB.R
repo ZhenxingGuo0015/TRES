@@ -5,9 +5,7 @@ M6Apeak <- function(mat,
                     update = "Joint",
                     trans = NULL,
                     optM = "L-BFGS-B",
-                    myfscale = -1e+6,
-                    method = "lnnb",
-                    useTylor = FALSE){
+                    myfscale = -1e+6){
   ### get statistic for each peak
   mu.hat = EstiMu(counts = mat, sf = sf)
   para = EstiPhi(counts = mat, sf = sf, update, trans = trans,
@@ -16,9 +14,7 @@ M6Apeak <- function(mat,
                        sf = sf,
                        mu = mu.hat,
                        phi = para$phi,
-                       theta = para$theta,
-                       method = method,
-                       useTylor = useTylor)
+                       theta = para$theta)
   if(is.null(cutoff)){
     ix1 = which(rowMeans(mat) > 200)
     ix2 = which(!is.na(mu.hat))
@@ -33,9 +29,8 @@ M6Apeak <- function(mat,
                     stats = tstat,
                     shrkPhi = para$phi,
                     pvals = pval,
-                    shrkTheta = para$theta,
-                    obj = para$obj,
-                    convergence = para$convergence))
+                    shrkTheta = para$theta
+                    ))
 }
 
 
@@ -290,16 +285,42 @@ EstiPhi.IterativeUpdate <- function(y, x, sy, sx, mu, theta0, mlphi, sdlphi,
   return(res)
 }
 
-EstiVarofMu <- function(counts, sf, mu, phi, theta, method = c("lnnb", "lnbb"),
-                        useTylor = FALSE){
+# EstiVarofMu <- function(counts, sf, mu, phi, theta, method = c("lnnb", "lnbb")){
+#
+#   method <- match.arg(method)
+#   switch(method,
+#          lnnb = EstiVarofMu.NB(counts, sf, mu, phi, theta),
+#          lnbb = EstiVarofMu.BB(counts, mu, phi, theta))
+# }
+# EstiVarofMu.NB <- function(counts, sf, mu, phi, theta){
+#   ### variance estimate of mu.hat
+#   n = ncol(counts)/2
+#   if(is.null(sf)){
+#     sf = colSums(counts)/median(colSums(counts))
+#   }
+#   sf.x = sf[seq(1, ncol(counts), 2)]
+#   sf.y = sf[seq(2, ncol(counts), 2)]
+#
+#   # if(!useTylor){
+#   tmp = sum(sf.y^{-1}) + n*theta
+#   mu.var = (mu/(n^2*theta))*(phi/(1 -  phi))*tmp
+#   # }else if(useTylor){
+#   #   ## approximation 2: by taylor's expansion
+#   #   tmp = (mu*sum(sf.x^{-1}) + (1-mu)*sum(sf.y^{-1}) + n*theta)
+#   #   mu.var = ((mu*(1-mu))/(n^2*theta))*tmp*(phi/(1 -  phi))
+#   # }
+#
+#
+#   return(mu.var)
+# }
+# EstiVarofMu.BB <- function(counts, mu, phi, theta){
+#   ### variance estimate of mu.hat, approximating by beta-binomial
+#   n = ncol(counts)/2
+#   mu.var = n^{-1}*mu*(1- mu)*(1 + theta^{-1})*phi
+#   return(mu.var)
+# }
 
-  method <- match.arg(method)
-  switch(method,
-         lnnb = EstiVarofMu.NB(counts, sf, mu, phi, theta, useTylor = useTylor),
-         lnbb = EstiVarofMu.BB(counts, mu, phi, theta))
-}
-
-EstiVarofMu.NB <- function(counts, sf, mu, phi, theta, useTylor = FALSE){
+EstiVarofMu <- function(counts, sf, mu, phi, theta){
   ### variance estimate of mu.hat
   n = ncol(counts)/2
   if(is.null(sf)){
@@ -308,25 +329,12 @@ EstiVarofMu.NB <- function(counts, sf, mu, phi, theta, useTylor = FALSE){
   sf.x = sf[seq(1, ncol(counts), 2)]
   sf.y = sf[seq(2, ncol(counts), 2)]
 
-  if(!useTylor){
-    tmp = sum(sf.y^{-1}) + n*theta
-    mu.var = (mu/(n^2*theta))*(phi/(1 -  phi))*tmp
-  }else if(useTylor){
-    ## approximation 2: by taylor's expansion
-    tmp = (mu*sum(sf.x^{-1}) + (1-mu)*sum(sf.y^{-1}) + n*theta)
-    mu.var = ((mu*(1-mu))/(n^2*theta))*tmp*(phi/(1 -  phi))
-  }
-
-
+  tmp = sum(sf.y^{-1}) + n*theta
+  mu.var = (mu/(n^2*theta))*(phi/(1 -  phi))*tmp
   return(mu.var)
 }
 
-EstiVarofMu.BB <- function(counts, mu, phi, theta){
-  ### variance estimate of mu.hat, approximating by beta-binomial
-  n = ncol(counts)/2
-  mu.var = n^{-1}*mu*(1- mu)*(1 + theta^{-1})*phi
-  return(mu.var)
-}
+
 
 getStats <- function(mu, mu0, var.mu){
   ### formulate statistics

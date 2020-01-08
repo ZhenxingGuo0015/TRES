@@ -80,7 +80,7 @@ A logical value to indicate whether or not include DESeq2 in the second step of 
 \value{
 The output of this function contains two results. One is saved as ".rda", which contains all the bins and theirs counts. The other is one ".xls" file, which contains a list of peaks called under the two-step procedure.
 The columns of the peak excel files are:
-\item{chr }{Chromosome number of the peak.}
+\item{chr }{Chromosome number of that peak.}
 \item{start}{The start of genomic position of that peak.}
 \item{end}{The end of genomic position of that peak.}
 \item{width}{The genomic length in base pair of that peak.}

@@ -104,12 +104,12 @@ MeRiPeak <- function(IP.file, Input.file,
 M6Apeak.MultiRep.step1 <- function(Counts, sf, bins,
                                    WhichThreshold = "fdr",
                                    pval.cutoff = 1e-5,
-                                   fdr.cutoff = 0.05,
+                                   fdr.cutoff = 1e-05,
                                    lfc.cutoff = 0.7,
                                    windlen = 5,
                                    lowcount = 10){
   ### peak calling when there are more than one replicate
-
+  require(GenomicFeatures)
   ### 1. find bumps for each replicate based on binomial test
   sx = sf[seq(1, length(sf), 2)]
   sy = sf[seq(2, length(sf), 2)]
@@ -240,16 +240,14 @@ M6Apeak.MultiRep.step1 <- function(Counts, sf, bins,
 
 M6Apeak.MultiRep.step2 <- function(Candidates, sf, mu.cutoff, addDEseq2 = FALSE){
   ### Order candidate peaks from step 1 with more sophisticated statistical model
-
   Candidates$score = NULL   ### first remove score from step 1
   thispeak = Candidates
-  thiscount = Candidates[,
-                         (ncol(Candidates) - (length(sf) -1)):ncol(Candidates)]
+  idx = which(grepl("rep", colnames(thispeak)) | grepl("bam", colnames(thispeak)))
+  thiscount = thispeak[, idx]
+
   if(!addDEseq2){
     res = M6Apeak(mat = as.matrix(thiscount), sf = sf, cutoff = mu.cutoff)
     res$score = p.adjust(res$pvals, method = "fdr")
-    res$obj = NULL
-    res$convergence = NULL
     thispeak = cbind(Candidates, res)
   }else if(addDEseq2){
 
@@ -269,23 +267,24 @@ M6Apeak.MultiRep.step2 <- function(Candidates, sf, mu.cutoff, addDEseq2 = FALSE)
     thispeak$NB_mu.var = res$mu.var
     thispeak$NB_theta = res$shrkTheta
     thispeak$NB_phi = res$shrkPhi
-    #thispeak$NB_loglik = res$obj
-    #thispeak$NB_convergence = res$convergence
   }
   return(thispeak)
 }
 
 
-M6Apeak.oneRep <- function(Counts, sf, bins,
+M6Apeak.oneRep <- function(Counts, sf = NULL, bins,
                            WhichThreshold = "fdr",
-                           pval.cutoff = 1e-5,
-                           fdr.cutoff = 0.05,
+                           pval.cutoff = 1e-05,
+                           fdr.cutoff = 1e-05,
                            lfc.cutoff = 0.7,
                            windlen = 5,
                            lowCount = 50){
   ### peak calling for real data when there are only one replicate
 
   ### step 1: grasp bumps based on lfc or binomial test
+  if(length(sf) == 0){
+    sf = colSums(Counts)/median(colSums(Counts))
+  }
   Pvals = rep(NA, nrow(Counts))
   idx = rowSums(Counts) > 0
   Pvals[idx] = 1 - pbinom(Counts[idx, 2], rowSums(Counts[idx, ]), prob = sf[2]/sum(sf))
@@ -321,7 +320,7 @@ M6Apeak.oneRep <- function(Counts, sf, bins,
     peaks$score = fdr
 
     ### calculate log fold change for peak regions
-    thiscount = peaks[, which(grepl("bam", colnames(peaks))) ]
+    thiscount = peaks[, which(grepl("bam", colnames(peaks)) | grepl("rep", colnames(peaks)) ) ]
     c0 = mean(as.matrix(thiscount), na.rm = TRUE)
     lfc = log((thiscount[, 2]/sf[2] + c0)/(thiscount[, 1]/sf[1] + c0))
     if(length(lfc) > windlen){
@@ -331,7 +330,7 @@ M6Apeak.oneRep <- function(Counts, sf, bins,
     }
     peaks$lg.fc = smooth.lfc
     return(peaks)
-  }else {
+  }else{
     cat("Less than 2 peaks!", sep = "\n")
     peaks = Bumps
     return(peaks)

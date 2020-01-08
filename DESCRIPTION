@@ -1,6 +1,6 @@
 Package: MeRIPeak
 Type: Package
-Title: An Empirical Bayesian method for MeRIP-seq Peak Detection.
+Title: An Empirical Bayesian Method for MeRIP-seq Peak Detection.
 Version: 0.1.0
 Author: Zhenxing Guo 
 Maintainer: Zhenxing Guo <zhenxing.guo@emory.edu>
@@ -8,3 +8,5 @@ Description: This function implements a two-step procedure to conduct peak calli
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
