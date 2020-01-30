@@ -19,4 +19,11 @@ TRES_peak(IP.file = IP.bam,
           experiment_name = Sample)
 
 
-Please find the use manual [here](https://github.com/ZhenxingGuo0015/TRES/tree/master/doc/TRES.html)
+
+
+
+
+
+---------------------------------
+
+Please find the use manual [here](https://github.com/ZhenxingGuo0015/TRES/tree/master/doc/TRES.Rmd)
