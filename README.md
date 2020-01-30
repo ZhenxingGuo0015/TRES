@@ -26,4 +26,4 @@ TRES_peak(IP.file = IP.bam,
 
 ---------------------------------
 
-Please find the use manual [here](https://github.com/ZhenxingGuo0015/TRES/tree/master/doc/TRES.Rmd)
+Please find the user manual [here](https://github.com/ZhenxingGuo0015/TRES/tree/master/doc/TRES.Rmd)
