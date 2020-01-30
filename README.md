@@ -19,4 +19,3 @@ TRES_peak(IP.file = IP.bam,
           experiment_name = Sample)
 
 
-Please find more details in ./doc/TRES.md
