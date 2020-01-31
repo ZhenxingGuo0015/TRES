@@ -1,7 +1,6 @@
 ---
 title: "Analyzing MeRIP-seq data with TRES"
 author: "Zhenxing Guo"
-#date: "1/7/2020"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Put the title of your vignette here}
