@@ -72,6 +72,9 @@ A logical value to indicate whether or not include DESeq2 in the second step of 
  A character to specify the name of results folder.
 }
 
+\item{filetype}{
+ A character to specify the format of input data. Possible choices are: .bam, .bed and Granges.
+}
 
 }
 \details{

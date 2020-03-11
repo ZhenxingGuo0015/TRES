@@ -3,7 +3,7 @@
 read.BAM <- function(fn){
   require(Rsamtools)
   param = ScanBamParam(what=c("rname","strand","pos","qwidth"))
-  bam = scanBam(fn,param=param)[[1]]
+  bam = scanBam(fn, param=param)[[1]]
   ix = !is.na(bam$rname) & !is.na(bam$pos)
   qwidth = bam$qwidth[ix]
   IRange.reads <- GRanges(seqnames=Rle(bam$rname[ix]),
@@ -14,16 +14,25 @@ read.BAM <- function(fn){
 
 
 ## get read counts for given genomic windows
-getWinCounts <- function(files, wins, filetype = c("bed","bam")) {
+getWinCounts <- function(files, wins, filetype = c("bed", "bam", "GRanges")) {
   if(class(wins)!="data.frame" & class(wins)!="GRanges")
     stop("Input genomic intervals must be a GRanges or data frame!")
   if(class(wins)=="data.frame") wins = import(wins)
   counts = matrix(0, nrow = length(wins), ncol = length(files))
+  if(filetype == "GRanges")
+    require(datasetTRES)
+
   for(i in 1:length(files)) {
-    if(filetype == "bam")
-      reads = read.BAM(files[i])
-    else if(filetype == "bed")
-      reads = import(files[i])
+    if(filetype!= "GRanges"){
+      if(filetype == "bam")
+        reads = read.BAM(files[i])
+      else if(filetype == "bed")
+        reads = import(files[i])
+    }else if(filetype == "GRanges"){
+      ### data in datasetTRES package
+      #reads = get(paste0(getwd(), "/", files[i]))
+      reads = get(files[i])
+    }
     ### added my Zhenxing to avoid repeated counting
     # width(reads) = 2
     #### ended

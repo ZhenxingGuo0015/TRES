@@ -9,9 +9,10 @@ TRES_peak <- function(IP.file, Input.file,
                      lfc.cutoff0 = 0.7,
                      mu.cutoff0 = 0.5,
                      addDEseq2 = FALSE,
-                     InputDir,
-                     OutputDir,
-                     experiment_name){
+                     InputDir = NULL,
+                     OutputDir = NULL,
+                     experiment_name,
+                     filetype = "bam"){
   ### 1. divide the genome into bins and get bin counts, bin directions
   t.0 = Sys.time()
   t1 = Sys.time()
@@ -22,14 +23,14 @@ TRES_peak <- function(IP.file, Input.file,
   t2 - t1
   cat("Time used for dividing genome is: ", t2 - t1, sep = "\n")
 
-  bamfiles = rep(NA, 2*length(IP.file))
-  bamfiles[seq(1, length(bamfiles), 2)] = Input.file
-  bamfiles[seq(2, length(bamfiles), 2)] = IP.file
+  datafiles = rep(NA, 2*length(IP.file))
+  datafiles[seq(1, length(datafiles), 2)] = Input.file
+  datafiles[seq(2, length(datafiles), 2)] = IP.file
 
   cat("Get bin counts...", sep = "\n")
   t1 =  Sys.time()
-  allCounts = getWinCounts(files = file.path(paste0(InputDir, bamfiles)),
-                           wins = bins.exons$bins, filetype = "bam")
+  allCounts = getWinCounts(files = file.path(paste0(InputDir, datafiles)),
+                           wins = bins.exons$bins, filetype = filetype)
   t2 - t1
   t2 =  Sys.time()
   cat("Time used for obtaining bin counts is: ", t2 - t1, sep = "\n")
@@ -45,6 +46,7 @@ TRES_peak <- function(IP.file, Input.file,
   cat("Start to call peaks...", sep = "\n")
   if(length(IP.file) > 1){
     ##### two-step procedure
+
     ### step 1
     cat("###### Step 1:...", sep = "\n")
     t1 = Sys.time()
