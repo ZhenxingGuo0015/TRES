@@ -31,20 +31,35 @@ There are one main function and multiple subfunctions in TRES for different usag
 ## 2. Main function of peak calling: TRES_peak
 It is very convenient to conduct peak calling using this function. It starts from BAM files, so all you need are BAM files of IP and input samples output from sequence alignment tools like Bowtie2. It requires you know (of course) the reference genome ( like "mm9", "mm10", "hg18", "hg19",...) of your sequencing data. "InputDir" is the directory where you store the BAM files for both IP ("ip1.bam", "ip2.bam", ...) and input ("input1.bam", "input2.bam", ...) samples. "OutDir" and "experiment_name" are your output directory and the name you want for the peak excel file respectively.
 
-A quick example with setup of required parameters:
+A quick example with setup of required parameters, which uses the example dataset (only chr1 and chr19 from the cerebellum sample of **Young Mouse data**) saved in data package **datasetTRES** (please install it first).:
 ```{r, eval=FALSE}
-IP.file = c("ip1.bam", "ip2.bam")
-Input.file = c("input1.bam", "input2.bam")
-MyInputDir = "/Users/zhenxingguo/Documents/research/m6a/Me/working/RealdataAnalysis/data/Mouse/bam/"
-MyOutDir = "/Users/zhenxingguo/Documents/research/m6a/Me/working/RealdataAnalysis/Results/Mouse/PeakList/MyPeak/"
+## Use bam file in datasetTRES
+IP.file = c("cb_6wk_ip_rep1_chr1_chr19.bam", "cb_6wk_ip_rep2_chr1_chr19.bam")
+Input.file = c("cb_6wk_input_rep1_chr1_chr19.bam", "cb_6wk_input_rep2_chr1_chr19.bam")
+BamDir = file.path(system.file(package = "datasetTRES"), "bams")
+OutDir = YourOutputDir
 TRES_peak(IP.file = IP.file,
-         Input.file = Input.file,
-         genomeBuild = "mm9",
-         InputDir = MyInputDir,
-         OutputDir = MyOutDir,
-         experiment_name = "example")
+          Input.file = Input.file,
+          genomeBuild = "mm9",
+          InputDir = BamDir,
+          OutputDir = OutDir,
+          experiment_name = "example",
+          filetype = "bam")
+peaks = read.table(paste0(OutDir, "example_peaks.xls"), sep = "\t", header = TRUE)
+head(peaks)
 
-peaks = read.table(paste0(MyOutDir, "example_peaks.xls"), sep = "\t", header = TRUE)
+## or, use GRanges file in datasetTRES
+IP.file = c("cb_6wk_ip_rep1_chr1_chr19", "cb_6wk_ip_rep2_chr1_chr19")
+Input.file = c("cb_6wk_input_rep1_chr1_chr19", "cb_6wk_input_rep2_chr1_chr19")
+OutDir = YourOutputDir
+TRES_peak(IP.file = IP.file,
+          Input.file = Input.file,
+          genomeBuild = "mm9",
+          InputDir = NULL,
+          OutputDir = OutDir,
+          experiment_name = "example",
+          filetype = "GRanges")
+peaks = read.table(paste0(OutDir, "example_peaks.xls"), sep = "\t", header = TRUE)
 head(peaks)
 ```
 
@@ -84,6 +99,9 @@ head(peaks)
 
 **experiment_name**:
  A character to specify the name of results folder.
+ 
+**filetype**:
+A character to specify the format of input data. Possible choices are: "bam", "bed" and "GRanges". Note, "GRanges" only works for the example data saved in the data package ''datasetTRES''.
 
 ### TRES_peak Outputs
 The output of this function contains two set of results. One is saved as ".rda", which contains all the genomic bins from the reference genome and theirs read counts. The other is one ".xls" file, which contains a list of called peaks. The columns of the peak excel files are:

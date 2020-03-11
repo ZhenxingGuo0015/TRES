@@ -258,6 +258,11 @@ M6Apeak.MultiRep.step2 <- function(Candidates, sf, mu.cutoff = 0.5, addDEseq2 = 
     res = M6Apeak(mat = as.matrix(thiscount), sf = sf, cutoff = mu.cutoff)
     res$score = p.adjust(res$pvals, method = "fdr")
     thispeak = cbind(Candidates, res)
+
+    #### added on March 11, 2020: rank the peak list based on their statistics
+    thispeak = thispeak[order(thispeak$stats, decreasing = TRUE), ]
+    #### ended editing
+
   }else if(addDEseq2){
 
     ## deseq2
@@ -276,6 +281,11 @@ M6Apeak.MultiRep.step2 <- function(Candidates, sf, mu.cutoff = 0.5, addDEseq2 = 
     thispeak$NB_mu.var = res$mu.var
     thispeak$NB_shrkTheta = res$shrkTheta
     thispeak$NB_shrkPhi = res$shrkPhi
+
+    #### added on March 11, 2020: rank the peak list based on their statistics
+    thispeak = thispeak[order(thispeak$NB_stat, decreasing = TRUE), ]
+    #### ended editing
+
   }
   return(thispeak)
 }
@@ -338,6 +348,11 @@ M6Apeak.oneRep <- function(Counts, sf = NULL, bins,
       smooth.lfc = lfc
     }
     peaks$lg.fc = smooth.lfc
+
+    ### Added on March 11, 2020: rank peaks based on the log fc
+    peaks$lg.fc = peaks[order(peaks$lg.fc, decreasing = TRUE), ]
+    ### eneded editing
+
     return(peaks)
   }else{
     cat("Less than 2 peaks!", sep = "\n")

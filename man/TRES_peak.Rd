@@ -12,7 +12,7 @@ In the first step, it loosely indentify candidate peak regions using an ad hoc p
 TRES_peak(IP.file, Input.file, genomeBuild, binsize,
 sf0, WhichThreshold, pval.cutoff0,
 fdr.cutoff0, lfc.cutoff0, mu.cutoff0,
-addDEseq2, InputDir, OutputDir, experiment_name)
+addDEseq2, InputDir, OutputDir, experiment_name, filetype)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -73,7 +73,7 @@ A logical value to indicate whether or not include DESeq2 in the second step of 
 }
 
 \item{filetype}{
- A character to specify the format of input data. Possible choices are: .bam, .bed and Granges.
+ A character to specify the format of input data. Possible choices are: ``bam", ``bed" and ``GRanges". Note, ``Granges" only works for the example data saved in the data package ``datasetTRES".
 }
 
 }
