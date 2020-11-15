@@ -1,4 +1,5 @@
-# TRES
+# Analyzing MeRIP-seq data with TRES
+
 ## Abstract
 The post-transcriptional epigenetic modiﬁcation on mRNA is an emerging ﬁeld to study the gene regulatory mechanism and their association with diseases. Recently developed high-throughput sequencing technology named Methylated RNA Immunoprecipitation Sequencing (MeRIP-seq) enables one to proﬁle mRNA epigenetic modiﬁcation transcriptome-wide. A basic task in the analysis of MeRIP-seq data is to identify transcriptome-wide m6A regions (namely "peak calling"). The package TRES provides methods for peak calling of MeRIP-seq data, based on an empirical Bayesian hierarchical model. The method accounts for various sources of variations in the data through rigorous modeling, and achieves shrinkage estimation by borrowing informations from transcriptome-wide data to stabilize the parameter estimation. This vignette explains the use of the package by introducing typical workflows. TRES package version: 0.1.0.
 
@@ -126,18 +127,29 @@ If you have more than 1 replicates and already have bin-level counts from BAM fi
 
 A quick example:
 ```{r, eval=FALSE}
-data("Basal_binlevel") 
-### The first 14 columns are from basal samples of mouse cortex
-sf0 = colSums(allbincount)/median(colSums(allbincount))
+data("Basal_binlevel") ### The first 14 columns are from basal samples of mouse cortex
+sf0 = colSums(allbincount)/median(colSums(allbincount)) # size factor estimation
+### first step to call candidate regions
 peak_step1 = M6Apeak.MultiRep.step1(Counts = allbincount[, 1:14],
                                     bins = allbins,
                                     sf = sf0[1:14],
                                     WhichThreshold = "lfc",
                                     lfc.cutoff = 0.5)
-Peaks = M6Apeak.MultiRep.step2(Candidates = peak_step1, 
+### estimate background methylation level
+idx = which(grepl("rep", colnames(peak_step1)) | 
+              grepl("bam", colnames(peak_step1)))
+PeakCount = peak_step1[, idx]
+bgCount = colSums(allbincount[, 1:14]) - colSums(PeakCount)
+bg.Input = bgCount[seq(1, length(bgCount), 2)]
+bg.IP = bgCount[seq(2, length(bgCount), 2)]
+bg.mu = mean((bg.IP/sf0[seq(2, length(bgCount), 2)])/(bg.IP/sf0[seq(2, 
+                                                                    length(bgCount), 2)] + bg.Input/sf0[seq(1, length(bgCount),                                                                                                            2)]), na.rm = TRUE)
+### second step to detect and rank significant m6a regions among candidates
+Peaks = M6Apeak.MultiRep.step2(Candidates = peak_step1, mu.cutoff = bg.mu,
                                sf = sf0[1:14])
 head(Peaks)
 ```
+
 #### M6Apeak.MultiRep.step1
 This function assumes you have already binned the whole reference transcriptome into windows of fixed length (such as 50 basepair long) and obtained the corresponding read counts within each window for all samples.
 
@@ -224,5 +236,6 @@ data("Basal_binlevel") ###  sf0 estimated from bin-level count
 peaks = M6Apeak.MultiRep.step2(Candidates = Basal, sf = sf0, mu.cutoff = 0.5)
 head(peaks)
 ```
+
 
 
