@@ -12,6 +12,7 @@ From GitHub:
 install.packages("devtools") # if you have not installed "devtools" package
 library(devtools)
 install_github("https://github.com/ZhenxingGuo0015/TRES")
+library(TRES)
 ```
 There are one main function and multiple subfunctions in TRES for different usages.
 
