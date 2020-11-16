@@ -134,7 +134,7 @@ The output of this function contains two set of results. One is saved as ".rda",
 
 **p.adj**: Adjusted p-values using FDR.
 
-**rSocre**: A score used to ranke each site. The higher the score, the higher the rank.
+**rSocre**: A score used to rank each site. The higher the score, the higher the rank.
 
 Note, there are additional columns whose name involves the character ".bam". These columns contain the peak-level read counts in respective samples.
 
@@ -234,7 +234,7 @@ The output is a dataframe. In addition to the genomic locations, read counts and
 
 **p.adj**: Adjusted p-values using FDR.
 
-**rSocre**: A score used to ranke each region. The higher the score, the higher the rank would be.
+**rSocre**: A score used to rank each region. The higher the score, the higher the rank would be.
 
 If there is only one biological replicate from your experiment. You can use function **M6Apeak.oneRep** to conduct peak calling, which also starts with bin-level read counts as input. The input and output of this function are pretty much similar to the input of "M6Apeak.MultiRep.step1".
 ```{r, eval = FALSE}
