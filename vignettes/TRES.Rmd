@@ -48,6 +48,23 @@ TRES_peak(IP.file = IP.file,
 peaks = read.table(paste0(OutDir, "example_peaks.xls"), sep = "\t", header = TRUE)
 head(peaks)
 
+
+## or take bam files in "datasetTRES"
+IP.file = c("cb_ip_rep1_chr19.bam", "cb_ip_rep2_chr19.bam")
+Input.file = c("cb_input_rep1_chr19.bam", "cb_input_rep2_chr19.bam")
+BamDir = file.path(system.file(package = "datasetTRES"), "extdata/")
+OutDir = YourOutputDir
+TRES_peak(IP.file = IP.file,
+          Input.file = Input.file,
+          genomeBuild = "mm9",
+          InputDir = BamDir,
+          OutputDir = OutDir,
+          experiment_name = "examplebyBam",
+          filetype = "bam")
+peaks = read.table(paste0(OutDir, "examplebyBam_peaks.xls"), sep = "\t", header = TRUE)
+head(peaks)
+
+
 ## or, directly take bam files from your path
 IP.file = c("ip_rep1.bam", "ip_rep2.bam")
 Input.file = c("input_rep1.bam", "input_rep2.bam")
