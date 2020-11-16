@@ -334,7 +334,7 @@ M6Apeak.oneRep <- function(Counts, sf = NULL, bins,
     peaks$lg.fc = smooth.lfc
 
     ### Added on March 11, 2020: rank peaks based on the log fc
-    peaks$lg.fc = peaks[order(peaks$lg.fc, decreasing = TRUE), ]
+    peaks = peaks[order(peaks$lg.fc, decreasing = TRUE), ]
     ### eneded editing
 
     return(peaks)
