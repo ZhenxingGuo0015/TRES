@@ -237,7 +237,7 @@ The output is a dataframe. In addition to the genomic locations, read counts and
 **rSocre**: A score used to rank each region. The higher the score, the higher the rank would be.
 
 If there is only one biological replicate from your experiment. You can use function **M6Apeak.oneRep** to conduct peak calling, which also starts with bin-level read counts as input. The input and output of this function are pretty much similar to the input of "M6Apeak.MultiRep.step1".
-```{r, eval = FALSE}
+```markdown
 # A toy example
 data("Basal_binlevel")
 peaks = M6Apeak.oneRep(Counts = allbincount[, 1:2], sf = sf0[1:2], bins = allbins)
@@ -247,7 +247,7 @@ head(peaks)
 ### 3.2 Other usage
 If you already have a list of peaks and the read counts but you want to re-rank them using TRES. You can also use function "M6Apeak.MultiRep.step2" to do this. This may perform bad if you didn't appropriately estiamte size factors. Based on our experience, the estimation of size factor should be based on the bin-level counts across the transcriptome, instead of region-level counts. For background methylation level, you can use 0.5 but it would be informative if you can estimate it from your data. 
 
-```{r, eval=FALSE}
+```markdown
 data("Basal_regionlevel")
 data("Basal_binlevel") ###  sf0 estimated from bin-level count
 peaks = M6Apeak.MultiRep.step2(Candidates = Basal, sf = sf0, mu.cutoff = 0.5)
