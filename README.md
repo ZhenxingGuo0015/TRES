@@ -160,7 +160,7 @@ bgCount = colSums(allbincount[, 1:14]) - colSums(PeakCount)
 bg.Input = bgCount[seq(1, length(bgCount), 2)]
 bg.IP = bgCount[seq(2, length(bgCount), 2)]
 bg.mu = mean((bg.IP/sf0[seq(2, length(bgCount), 2)])/(bg.IP/sf0[seq(2, 
-                                                                    length(bgCount), 2)] + bg.Input/sf0[seq(1, length(bgCount),                                                                                                            2)]), na.rm = TRUE)
+                                                                    length(bgCount), 2)] + bg.Input/sf0[seq(1, length(bgCount),2)]), na.rm = TRUE)
 ### second step to detect and rank significant m6a regions among candidates
 Peaks = M6Apeak.MultiRep.step2(Candidates = peak_step1, mu.cutoff = bg.mu,
                                sf = sf0[1:14])
