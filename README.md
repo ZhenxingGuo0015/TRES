@@ -16,6 +16,7 @@ A quick example with setup of required parameters, which uses the example datase
 ```{r, eval= FALSE}
 library(TRES)
 ## Use data in the form of GRanges in package "datasetTRES"
+# install: install_github("https://github.com/ZhenxingGuo0015/datasetTRES")
 library(datasetTRES)
 IP.file = c("cb_6wk_ip_rep1_chr19", "cb_6wk_ip_rep2_chr19")
 Input.file = c("cb_6wk_input_rep1_chr19", "cb_6wk_input_rep2_chr19")
