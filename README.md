@@ -8,7 +8,6 @@ install.packages("devtools") # if you have not installed "devtools" package
 library(devtools)
 install_github("https://github.com/ZhenxingGuo0015/TRES")
 ```
-There are one main function and multiple subfunctions in TRES for different usages.
 
 ## 2. Main function of peak calling: TRES_peak
 It is very convenient to conduct peak calling using this function. It starts from BAM files, so all you need are BAM files of IP and input samples output from sequence alignment tools like Bowtie2. It requires you know (of course) the reference genome ( like "mm9", "mm10", "hg18", "hg19",...) of your sequencing data. "InputDir" is the directory where you store the BAM files for both IP ("ip1.bam", "ip2.bam", ...) and input ("input1.bam", "input2.bam", ...) samples. "OutDir" and "experiment_name" are your output directory and the name you want for the peak excel file respectively.
