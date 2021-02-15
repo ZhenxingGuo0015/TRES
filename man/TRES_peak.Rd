@@ -109,7 +109,7 @@ Note, there are additional columns whose name involve the character ".bam". Thes
 %% ~put references to the literature/web site here ~
 %}
 \author{
-Zhenxing Guo, zhenxing.guo@emory.edu
+Zhenxing Guo <zhenxing.guo@emory.edu>
 }
 %\note{
 %%  ~~further notes~~
