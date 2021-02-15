@@ -5,7 +5,6 @@ TRES: Detecting m6A methylation regions from Methylated RNA Immunoprecipitation 
 ## Introduction
 The post-transcriptional epigenetic modiﬁcation on mRNA is an emerging ﬁeld to study the gene regulatory mechanism and their association with diseases. Recently developed high-throughput sequencing technology named Methylated RNA Immunoprecipitation Sequencing (MeRIP-seq) enables one to proﬁle mRNA epigenetic modiﬁcation transcriptome-wide. A basic task in the analysis of MeRIP-seq data is to identify transcriptome-wide m6A regions (namely "peak calling"). The package TRES provides methods for peak calling of MeRIP-seq data, based on an empirical Bayesian hierarchical model. The method accounts for various sources of variations in the data through rigorous modeling, and achieves shrinkage estimation by borrowing informations from transcriptome-wide data to stabilize the parameter estimation. This vignette explains the use of the package by introducing typical workflows. TRES package version: 0.1.0.
 
-## Acknowledgments
 
 ## Running TRES for peak calling
 ### 1. Installation
@@ -156,7 +155,7 @@ Note, there are additional columns whose name involves the character ".bam". The
 If you have more than 1 replicates and already have bin-level counts from BAM files. You can use functions "M6Apeak.MultiRep.step1" and "M6Apeak.MultiRep.step2" togther for peak calling. "M6Apeak.MultiRep.step1" detects and combine significant bins to form candidate regions, and "M6Apeak.MultiRep.step2" identifies and ranks significant candidate regions by the proposed empirical Bayesian hirarchical negative binomial model and by DESeq2 (if required).
 
 A quick example:
-```{r, eval= TRUE, message=FALSE, warning=FALSE}
+```r
 library(TRES)
 data("Basal_binlevel") ### The first 14 columns are from basal samples of mouse cortex
 sf0 = colSums(allbincount)/median(colSums(allbincount)) # size factor estimation
@@ -262,7 +261,7 @@ The output is a dataframe. In addition to the genomic locations, read counts and
 
 #### M6Apeak.oneRep
 If there is only one biological replicate from your experiment and you already obtain the bin-level read counts and annotation. You can use function **M6Apeak.oneRep** to conduct peak calling, which also starts with bin-level read counts as input. The input and output of this function are pretty much similar to the input of "M6Apeak.MultiRep.step1".
-```{r, eval = TRUE, message= FALSE, warning= FALSE}
+```r
 # A toy example
 library(TRES)
 data("Basal_binlevel")
@@ -315,7 +314,7 @@ Note, there are additional columns whose name involve the character ".bam". Thes
 ### 3.2 Re-rank existing peaks
 If you already have a list of peaks and the read counts but you want to re-rank them using TRES. You can run function "M6Apeak.MultiRep.step2" to do this. This may perform bad if you didn't appropriately estiamte size factors for each sample. Based on our experience, the estimation of size factor should be based on the bin-level counts across the whole transcriptome, not the  region-level counts. For background methylation level, you can use 0.5 but it would be informative if you can estimate it from your data. 
 
-```{r, eval=TRUE, message= FALSE, warning= FALSE}
+```r
 library(TRES)
 data("Basal_regionlevel") ### load candidate regions
 data("Basal_binlevel") ### load sf0 estimated from bin-level count
@@ -334,7 +333,7 @@ ShowOnePeak(onePeak, allBins, binCounts, ext = 500, ylim = c(0,1))
 In order to run this function, you need to have in hand for: 1) "onePeak": a pre-called peak saved as a dataframe, which contains genomic positions for that peak: "chr", "start", "end", "strand"; 2) "allBins": genomic positions ("chr", "start", "end", "strand") of all bins you used to call peaks; 3) "binCounts": the corresponding bin-level read counts in each replicate. This function will plot for each replicate: the methylation level of bins (blue bars) within the target peak(shade region in pink), and the normalized sequencing depth for input samples (curves in grey).
 We show some example plots here:
 
-```{r, eval=TRUE, message= FALSE, warning= FALSE}
+```r
 library(datasetTRES)
 IP.file = c("cb_ip_rep1_chr19.bam", "cb_ip_rep2_chr19.bam")
 Input.file = c("cb_input_rep1_chr19.bam", "cb_input_rep2_chr19.bam")
